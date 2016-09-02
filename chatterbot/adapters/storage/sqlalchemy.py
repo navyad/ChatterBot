@@ -176,10 +176,14 @@ class SQLAlchemyDatabaseAdapter(StorageAdapter):
         all listed attributes and in which all values
         match for all listed attributes will be returned.
         """
-
         filter_parameters = kwargs.copy()
 
         session = self.get_session()
+
+        if not filter_parameters:
+            _statements = session.query(StatementTable).filter().all()
+            return [obj.get_statement() for obj in _statements]
+
         session.query()
         stmts = []
         for fp in filter_parameters:
